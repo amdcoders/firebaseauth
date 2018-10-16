@@ -1,5 +1,6 @@
 package com.example.aakash.firbasetest;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +16,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
@@ -23,14 +28,19 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
 
-    EditText editText;
+    /*EditText editText;
     Button btn1;
     String text;
     TextView txtview;
     Firebase myfirebase;
     ArrayList<String> arrayList = new ArrayList<>();
     ListView listView;
-    String cde;
+    String cde;*/
+
+    EditText id,pass;
+    Button btnsub;
+    String idtxt,passtxt;
+    FirebaseAuth myfirebaseauth;
 
 
 
@@ -38,8 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        myfirebaseauth = FirebaseAuth.getInstance();
 
-       editText = (EditText)findViewById(R.id.abc);
+      /* editText = (EditText)findViewById(R.id.abc);
        btn1 = (Button) findViewById(R.id.btn);
 
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,arrayList);
@@ -63,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                arrayList.clear();
 
 
-             /* *//* while(nchid.getKey().toString() != null)
-               {*//*
+             *//* *//**//* while(nchid.getKey().toString() != null)
+               {*//**//*
                    nchid.addValueEventListener(new ValueEventListener() {
                        @Override
                        public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,8 +88,11 @@ public class MainActivity extends AppCompatActivity {
                        public void onCancelled(FirebaseError firebaseError) {
 
                        }
-                   });*/
-               /*}*/
+                   });*//*
+               *//*}*//*
+               *
+               *
+
 
 
 
@@ -130,6 +144,48 @@ public class MainActivity extends AppCompatActivity {
 
            }
        });
+*/
+        Firebase.setAndroidContext(getApplicationContext());
+
+
+
+        id = (EditText)findViewById(R.id.email);
+        pass = (EditText)findViewById(R.id.pass);
+        btnsub = (Button)findViewById(R.id.btn);
+
+
+
+
+        btnsub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                idtxt = id.getText().toString();
+                passtxt = pass.getText().toString();
+                Toast.makeText(MainActivity.this, "click", Toast.LENGTH_SHORT).show();
+
+                myfirebaseauth.createUserWithEmailAndPassword(idtxt,passtxt)
+                        .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                // If sign in fails, display a message to the user. If sign in succeeds
+                                // the auth state listener will be notified and logic to handle the
+                                // signed in user can be handled in the listener.
+                                if (!task.isSuccessful()) {
+                                    Toast.makeText(MainActivity.this, "Authentication failed." + task.getException(),
+                                            Toast.LENGTH_SHORT).show();                        } else {
+                                    Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+
+
+            }
+        });
+
+
+
 
 
     }
